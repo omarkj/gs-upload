@@ -1,12 +1,19 @@
 #!/bin/sh
 
+echo "Starting run.sh"
+
 gcloud_install_dir="$WERCKER_STEP_ROOT/google-cloud-sdk/bin"
 gcloud="$gcloud_install_dir/gcloud"
 
-gcloud_key="$WERCKER_GCLOUD_KEY"
-file="$WERCKER_GCLOUD_FILE"
-target="$WERCKER_GCLOUD_TARGET"
-project="$WERCKER_GCLOUD_PROJECT"
+gcloud_key="$WERCKER_GSUPLOAD_KEY"
+file="$WERCKER_GSUPLOAD_FILE"
+target="$WERCKER_GSUPLOAD_TARGET"
+project="$WERCKER_GSUPLOAD_PROJECT"
+
+version() {
+    info "Running gcloud version:"
+    $gcloud --version
+}
 
 gcloud_authenticate() {
     if [ ! -n "$gcloud_key" ]; then
@@ -24,12 +31,13 @@ gcloud_authenticate() {
 
 upload() {
     token="$($gcloud auth print-access-token)"
-    curl -v --upload-file $file -H "Authorization: Bearer $token" "$target"
+    curl --upload-file $file -H "Authorization: Bearer $token" "$target"
 }
 
 main() {
-    gcloud_authenticate;
-    upload;
+    version
+    gcloud_authenticate
+    upload
 }
 
 main;

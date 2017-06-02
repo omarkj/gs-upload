@@ -1,5 +1,5 @@
-name: gcloud
-version: 157.0.0-6
+name: gsupload
+version: 0.0.3
 description: Google storage upload
 keywords:
   - gs

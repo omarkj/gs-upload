@@ -1,4 +1,4 @@
-box: wercker/default
+box: wercker/python
 build:
     steps:
         - script:
@@ -28,6 +28,6 @@ build:
         - script:
             name: prepare output
             code: |
-                cp  "${WERCKER_ROOT}/LICENSE" "${WERCKER_ROOT}/README.md" "${WERCKER_ROOT}/run.sh" "${WERCKER_ROOT}/wercker.yml" "${WERCKER_ROOT}/wercker-step.yml" "$WERCKER_OUTPUT_DIR"
-                cd $WERCKER_OUTPUT_DIR
                 chmod ugo+rx "$WERCKER_OUTPUT_DIR/${GCLOUD_DIRNAME}/bin/gcloud"
+                chmod ugo+rx "run.sh"
+                cp "LICENSE" "README.md" "run.sh" "wercker.yml" "wercker-step.yml" "$WERCKER_OUTPUT_DIR"
