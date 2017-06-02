@@ -1,0 +1,33 @@
+box: wercker/default
+build:
+    steps:
+        - script:
+            name: config
+            code: |
+                GCLOUD_VERSION="157.0.0-linux-x86_64"
+                export GCLOUD_SHA="383522491db5feb9f03053f29aaf6a1cf778e070"
+                export GCLOUD_DIRNAME="google-cloud-sdk"
+                export GCLOUD_FILENAME="${GCLOUD_DIRNAME}-${GCLOUD_VERSION}.tar.gz"
+                export GCLOUD_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${GCLOUD_FILENAME}"
+        - script:
+            name: Fetch gcloud archive
+            code: |
+                curl -L ${GCLOUD_URL} -o ${GCLOUD_FILENAME}
+        - script:
+            name: Validate gcloud archive
+            code: |
+                sha1sum ${GCLOUD_FILENAME} | grep -q "${GCLOUD_SHA}"
+        - script:
+            name: Extract gcloud archive
+            code: |
+                tar -xzf ${GCLOUD_FILENAME}
+        - script:
+            name: Copy gcloud to output dir
+            code: |
+                cp -r "${GCLOUD_DIRNAME}" ${WERCKER_OUTPUT_DIR}
+        - script:
+            name: prepare output
+            code: |
+                cp  "${WERCKER_ROOT}/LICENSE" "${WERCKER_ROOT}/README.md" "${WERCKER_ROOT}/run.sh" "${WERCKER_ROOT}/wercker.yml" "${WERCKER_ROOT}/wercker-step.yml" "$WERCKER_OUTPUT_DIR"
+                cd $WERCKER_OUTPUT_DIR
+                chmod ugo+rx "$WERCKER_OUTPUT_DIR/${GCLOUD_DIRNAME}/bin/gcloud"

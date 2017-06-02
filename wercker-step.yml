@@ -1,0 +1,20 @@
+name: gcloud
+version: 157.0.0-6
+description: Google storage upload
+keywords:
+  - gs
+  - upload
+  - gcloud
+properties:
+  key:
+    type: string
+    required: true
+  project:
+    type: string
+    required: true
+  file:
+    type: string
+    required: true
+  target:
+    type: string
+    required: true
